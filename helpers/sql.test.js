@@ -4,7 +4,7 @@ const request = require('supertest')
 const { sqlForPartialUpdate } = require('./sql')
 
 
-test("Check if js column name convert to sql column name", function() {
+test("Check if js column name converts to sql column name", function() {
     let dataToUpdate = { firstName: 'Kacy', lastName: 'Bryson', isAdmin: 'false'};
     let jsToSql = {
         firstName: 'first_name',

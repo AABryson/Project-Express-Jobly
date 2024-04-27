@@ -28,7 +28,8 @@ const router = express.Router();
  * Authorization required: login
  **/
 //originally had ensureLoggedIn
-router.post("/", ensureAdmin, async function (req, res, next) {
+router.post("/", ensureAdmin || ensureLoggedIn, async function (req, res, next) {
+// router.post("/", async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, userNewSchema);
     if (!validator.valid) {
@@ -44,6 +45,8 @@ router.post("/", ensureAdmin, async function (req, res, next) {
   }
 });
 
+
+//#################################################testing trouble
 router.post('/:username/jobs/:id', async function(req, res, next){
   try {
     // let username = req.params.username;

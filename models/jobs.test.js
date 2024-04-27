@@ -8,7 +8,7 @@ const {
     commonBeforeEach,
     commonAfterEach,
     commonAfterAll,
-    testJobIds,
+    testJobIds
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -40,17 +40,6 @@ test('find job in database', async function(){
         })
 })
 
-
-// test('update job in database', async function(){
-//     //##############################################
-// })
-
-test('delete job from database', async function(){
-    let delete_job = await Job.deleteJob('testJobTitle1')
-    //#########################json
-    expect(delete_job).toEqual({ deleted: 'testJobTitle1'})
-})
-
 test('create a new job', async function(){
     let newJob = {
         title: 'philosopher',
@@ -59,8 +48,33 @@ test('create a new job', async function(){
         companyHandle: 'c1'
     }
     let result = await Job.createJob(newJob)
-    expect(newJob).toEqual({ title: 'philosopher', salary: 70000, equity: '0', companyHandle: 'c1'})
+    expect(result).toEqual({ title: 'philosopher', salary: 70000, equity: '0', id: expect.any(Number), companyHandle: 'c1'})
 })
+
+test("update job in database", async function () {
+    let data = {
+        title: 'NewJob',
+        salary: 5,
+        equity: '0'
+    }
+    let job = await Job.updateJob(1, data);
+    expect(job).toEqual({
+    //   id: 1,
+      company_handle: "c1",
+      ...data,
+    });
+  });
+
+
+
+test('delete job from database', async function(){
+    let delete_job = await Job.deleteJob('testJobTitle1')
+    //#########################json
+    console.log(delete_job)
+    expect(delete_job).toEqual({ title: 'testJobTitle1'})
+})
+
+
 
 
 

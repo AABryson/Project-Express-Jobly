@@ -10,6 +10,9 @@ async function commonBeforeAll() {
   //my addition
   await db.query("DELETE FROM jobs")
 
+
+  const testJobIds = [];
+
   await db.query(`
     INSERT INTO companies(handle, name, num_employees, description, logo_url)
     VALUES ('c1', 'C1', 1, 'Desc1', 'http://c1.img'),
@@ -30,8 +33,11 @@ async function commonBeforeAll() {
         await bcrypt.hash("password2", BCRYPT_WORK_FACTOR),
       ]);
     
-  await db.query(`INSERT INTO jobs(id, title, salary, equity, company_handle) VALUES (1, 'testJobTitle1', 100, 0, 'c1'), (2, 'testJobTitle2', 0, 0.5, 'c2') RETURNING title`)
-    
+  // await db.query(`INSERT INTO jobs(id, title, salary, equity, company_handle) VALUES (1, 'testJobTitle1', 100, 0, 'c1'), (2, 'testJobTitle2', 0, 0.5, 'c2') RETURNING title`)
+  
+  let jobResults = await db.query(`INSERT INTO jobs(id, title, salary, equity, company_handle) VALUES (1, 'testJobTitle1', 100, 0, 'c1'), (2, 'testJobTitle2', 0, 0.5, 'c2') RETURNING title`)
+  
+  // testJobIds.splice(0, 0, ...jobResults.rows.map(r => r.title));
 //   const resultsJobs = await db.query(`
 //     INSERT INTO jobs (title, salary, equity, company_handle)
 //     VALUES ('testJobTitle1, 100, '0', 'c1'),
@@ -39,6 +45,8 @@ async function commonBeforeAll() {
 //     RETURNING id`);
 // testJobIds.splice(0, 0, ...resultsJobs.rows.map(r => r.id));
 
+
+// ###########################################
   await db.query(`INSERT INTO applications(username, job_id) VALUES ('u1', '1') RETURNING job_id`)
 }
 
@@ -60,4 +68,5 @@ module.exports = {
   commonBeforeEach,
   commonAfterEach,
   commonAfterAll,
+  // testJobIds
 };

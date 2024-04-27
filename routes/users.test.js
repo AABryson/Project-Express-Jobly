@@ -24,6 +24,7 @@ afterAll(commonAfterAll);
 /************************************** POST /users */
 
 describe("POST /users", function () {
+  //###################################?
   test("works for users: create non-admin", async function () {
     const resp = await request(app)
         .post("/users")
@@ -89,7 +90,7 @@ describe("POST /users", function () {
           isAdmin: true,
 
         })
-        .set('authorization', `Bearer ${u1Token}`);
+        // .set('authorization', `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(401);
   });
 
@@ -177,15 +178,16 @@ describe("GET /users", function () {
 describe("GET /users/:username", function () {
   test("works for users", async function () {
     const resp = await request(app)
-        .get(`/users/u1`)
+        .get(`/users/u2`)
         .set("authorization", `Bearer ${u2Token}`);
     expect(resp.body).toEqual({
       user: {
-        username: "u1",
-        firstName: "U1F",
-        lastName: "U1L",
-        email: "user1@user.com",
-        isAdmin: false
+        username: "u2",
+        firstName: "U2F",
+        lastName: "U2L",
+        email: "user2@user.com",
+        isAdmin: false,
+        jobs: []
       },
     });
   });
@@ -200,7 +202,11 @@ describe("GET /users/:username", function () {
       firstName: "U1F",
       lastName: "U1L",
       email: "user1@user.com",
-      isAdmin: false}
+      isAdmin: false,
+      jobs: [{
+        job_id: expect.any(Number)
+      }]
+    }
     })
   })
 

@@ -98,7 +98,7 @@ describe("GET /companies", function () {
     });
   });
 
-  test('filter companies by maxNum employees', async function(){
+  test('filter companies by minimum number of employees', async function(){
     const resp = await request(app).get('/companies/?minEmployees=3');
     expect(resp.body).toEqual({"companies": [
       {
@@ -109,6 +109,11 @@ describe("GET /companies", function () {
         "logoUrl": 'http://c3.img'
       }]
     })
+  })
+  test("try bad filter specification - company doesn't exist", async function(){
+    let result = await request(app).get('/comapnies/?name=c5');
+    console.log(result.body);
+    expect(result.statusCode).toEqual(404)
   })
 
   test('filter companies by name', async function(){
@@ -121,7 +126,7 @@ describe("GET /companies", function () {
         "numEmployees": 1,
         "logoUrl": 'http://c1.img'
       }]
-    })
+    });
   })
 
   test("fails: test next() handler", async function () {
@@ -203,7 +208,6 @@ describe("PATCH /companies/:handle", function () {
       .send({name: "C1-new",
       })
       .set("authorization", `Bearer ${u1Token}`)
-    console.log(resp.body)
     expect(resp.statusCode).toEqual(401)
   })
 
@@ -254,7 +258,7 @@ describe("DELETE /companies/:handle", function () {
   test("works for users", async function () {
     const resp = await request(app)
         .delete(`/companies/c1`)
-        .set("authorization", `Bearer ${u1Token}`);
+        .set("authorization", `Bearer ${u2Token}`);
     expect(resp.body).toEqual({ deleted: "c1" });
   });
 
@@ -267,7 +271,7 @@ describe("DELETE /companies/:handle", function () {
   test("not found for no such company", async function () {
     const resp = await request(app)
         .delete(`/companies/nope`)
-        .set("authorization", `Bearer ${u1Token}`);
+        .set("authorization", `Bearer ${u2Token}`);
     expect(resp.statusCode).toEqual(404);
   });
 });

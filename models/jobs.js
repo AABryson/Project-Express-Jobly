@@ -5,23 +5,13 @@ const { sqlForPartialUpdate } = require("../helpers/sql");
 
 class Job {
 //#################{}??
-    static async createJob(job) {
-        //##################db.query
-        // let companyHandle = await db.query(`SELECT company_handle FROM jobs WHERE company_handle = $1`, [company_handle])
-        // if(companyHandle.rows.length === 0){
-        //     throw new BadRequestError('The company handle could not be found')
-        // }
-        let result = await db.query(`INSERT INTO jobs (title, salary, equity, company_handle) VALUES ($1, $2, $3, $4) RETURNING id, title, salary, equity, company_handle AS "companyHandle"`, [job.title, job.salary, job.equity, job.companyHandle]);
-        //#######just result.rows instead?
-        let jobby = result.rows[0];
-        return jobby
-    }
 //#in solution have LEFT JOIN
     static async getAllJobs(){
         let result = await db.query(`SELECT * FROM jobs`);
         allJobs = result.rows
         return alljobs;
-    }
+}
+    
 
     static async getAllJobs(title, minSalary, hasEquity) {
         if(title || minSalary || hasEquity){
@@ -52,6 +42,19 @@ class Job {
         return foundJob;
     }
 
+    static async createJob(job) {
+        //##################db.query
+        // let companyHandle = await db.query(`SELECT company_handle FROM jobs WHERE company_handle = $1`, [company_handle])
+        // if(companyHandle.rows.length === 0){
+        //     throw new BadRequestError('The company handle could not be found')
+        // }
+        let result = await db.query(`INSERT INTO jobs (title, salary, equity, company_handle) VALUES ($1, $2, $3, $4) RETURNING id, title, salary, equity, company_handle AS "companyHandle"`, [job.title, job.salary, job.equity, job.companyHandle]);
+        //#######just result.rows instead?
+        let jobby = result.rows[0];
+        return jobby
+    }
+
+
     static async updateJob(id, data){
         const { setCols, values } = sqlForPartialUpdate(data, {});
         let idVarIdx = "$" + (values.length + 1);
@@ -66,11 +69,13 @@ class Job {
 
     static async deleteJob(title){
         let result = await db.query(`DELETE FROM jobs WHERE title = $1 RETURNING title`, [title]);
-        
+        console.log('result', result.rows[0])
         let returnedTitle = result.rows[0];
         if(!returnedTitle){
-            throw new NotFoundError('no job with that title')
+            throw new NotFoundError('no job with that title');
         }
+//#kept getting undefined for test; forgot return
+        return returnedTitle
         
     }
 

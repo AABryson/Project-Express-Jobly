@@ -85,7 +85,19 @@ describe("findAll", function () {
       },
     ]);
   });
-  
+  test('try using filter', async function(){
+    const minEmployees = 3
+    let result = await Company.findAll(null, minEmployees);
+    console.log(result)
+    //#########just result.  not result.body
+    expect(result).toEqual([{
+      handle: "c3",
+      name: "C3",
+      description: "Desc3",
+      numEmployees: 3,
+      logoUrl: "http://c3.img"
+    }])
+  })
 });
 
 /************************************** get */
@@ -106,9 +118,9 @@ describe("get", function () {
         "salary": 100,
         "title": "testJobTitle1",
       }],
-  
     });
   });
+
 
   test("not found if no such company", async function () {
     try {

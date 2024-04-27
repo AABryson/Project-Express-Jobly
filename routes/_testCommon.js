@@ -14,6 +14,9 @@ async function commonBeforeAll() {
   //#added this; not sure if needed;
   await db.query("DELETE FROM jobs")
 
+  //#deleting from application table
+  await db.query('DELETE FROM applications')
+
   await Company.create(
       {
         handle: "c1",
@@ -70,7 +73,9 @@ async function commonBeforeAll() {
     password: "password3",
     isAdmin: false,
   });
-  // await User.applyToJob("u1", testJobIds[0]);
+
+  //######?????????????
+  await User.applyToJob("u1", testJobIds[0]);
 //#################
   // await User.apply('u3', testJobIds[0])      
 }
