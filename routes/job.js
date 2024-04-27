@@ -12,17 +12,20 @@ const { ensureAdmin } = require("../middleware/auth");
 router.post('/', ensureAdmin, async function (req, res, next) {
     try {
 //#their code passed an object with properties title, etc.
-        // let title = req.body.title;
-        // let salary = req.body.salary;
-        // console.log(req.body.company_handle);
-        // let equity = req.body.equity;
-        // //foreign key;
-        // let company_handle = req.body.companyHandle;
-        console.log(req.body);
-        let postJob = await Job.createJob(req.body);
+        let title = req.body.title;
+        console.log(title);
+        let salary = req.body.salary;
+        let equity = req.body.equity;
+        //foreign key;
+        let company_handle = req.body.companyHandle;
+        let result = await Job.createJob(title, salary, equity, company_handle)
+        // console.log(req.body);
+        // let result = await Job.createJob(req.body);
+        console.log(result);
         
 //#their code has ({postjob}); i think that means there will be a key -postjob- and its value will be the object 'postjob'
-        return res.status(201).json({postJob})
+        return res.json({result})
+        // return res.status(201).json(postJob)
     } catch (err) {
 //#remember to return
         return next(err)

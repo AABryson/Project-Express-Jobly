@@ -23,10 +23,11 @@ afterAll(commonAfterAll);
 test('create new job', async function(){
     let resp = await request(app)
         .post('/jobs')
-        .send({ company_handle : 'c1', title : 'newJobTitle', salary : 100, equity : '0.2', })
+        .send({ id: 6, title : 'newJobTitle', salary : 100, equity : '0.2', company_handle : 'c1' })
         .set('authorization', `Bearer ${ u2Token }`);
+        console.log(resp.body)
     expect(resp.statusCode).toEqual(201);
-        expect(resp.body).toEqual({ postJob : { title : 'newJobTitle', salary : 100, equity : '0.2', companyHandle : 'c1'}})
+        expect(resp.body).toEqual({ postJob : { title : 'newJobTitle', salary : 100, equity : '0.2', company_handle : 'c1'}})
     // expect(resp.body).toEqual({ id : expect.any(Number), title : 'newJobTitle', salary : 100, equity : '0.2', company_handle : 'c1'})
 })
 
@@ -40,17 +41,17 @@ test('create new job but non admin', async function(){
 
 test('get all the jobs', async function(){
     let resp = await request(app).get('/jobs');
-    expect(resp.body).toEqual([{ id : expect.any(Number), title: 'testJobTitle1', salary : 100, equity : '0', company_handle : 'c1'}, { id : expect.any(Number), title: 'testJobTitle2', salary : 0, equity : '0.5', company_handle : 'c2'}])
+    expect(resp.body).toEqual([{ id : expect.any(Number), title: 'J1', salary : 1, equity : '0.1', company_handle : 'c1'}, { id : expect.any(Number), title: 'J2', salary : 2, equity : '0.2', company_handle : 'c1'}, {id : expect.any(Number), title: 'J3', salary : 3, equity : null, company_handle : 'c1'}])
 })
 
 test('get all jobs with particular title', async function(){
-    let resp = await request(app).get('/jobs/?title=testJobTitle1');
+    let resp = await request(app).get('/jobs/?title=J1');
     console.log(resp.body);
-    expect(resp.body).toEqual([{title: "testJobTitle1", salary: 100, id: expect.any(Number), equity: "0", company_handle: "c1" }])
+    expect(resp.body).toEqual([{title: "J1", salary: 1, id: expect.any(Number), equity: "0.1", company_handle: "c1" }])
 })
 
 test('get particular job', async function(){
-    let resp = await request(app).get('/jobs/testJobTitle1')
+    let resp = await request(app).get('/jobs/J2')
     expect(resp.body).toEqual({"companies": [{
         "description": "Desc1",
         "handle": "c1",
@@ -58,20 +59,20 @@ test('get particular job', async function(){
         "name": "C1",
         "num_employees": 1,
         }], "company_handle": "c1",
-        "equity": "0",
-        "salary": 100,
-        "title": "testJobTitle1",
+        "equity": "0.2",
+        "salary": 2,
+        "title": "J2",
     })
 })
 
 test('update a job', async function(){
     let  data = { title : 'newerJobTitle', salary : 200, equity : '0.5', company_handle : 'c1' }
-    let resp = await request(app).patch('/jobs/156')
+    let resp = await request(app).patch(`/jobs/${testJobIds[0]}`)
     .send(data)
     .set('authorization', `Bearer ${ u2Token }`);
-    expect(resp.body).toEqual({ postJob  : { id : expect.any(Number), title : 'newerJobTitle', salary : 200, equity : '0.5', company_handle : 'c1' }
-    })
+    expect(resp.body).toEqual({ title : 'newerJobTitle', salary : 200, equity : '0.5', company_handle : 'c1' })
 })
+
 
 test('try to update as non admin', async function(){
     let data = {data : { title : 'newerJobTitle', salary : 200, equity : '0.5', company_handle : 'c1' }};
@@ -84,9 +85,9 @@ test('try to update as non admin', async function(){
 
 test('delete a job', async function() {
     let resp = await request(app)
-    .delete('/jobs/testJobTitle1')
+    .delete('/jobs/J2')
     .set('authorization', `Bearer ${ u2Token }`)
-    expect(resp.body).toEqual({ deleted : 'testJobTitle1' })
+    expect(resp.body).toEqual({ deleted : 'J2' })
 
 })
 

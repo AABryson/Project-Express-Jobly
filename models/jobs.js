@@ -51,6 +51,7 @@ class Job {
         let result = await db.query(`INSERT INTO jobs (title, salary, equity, company_handle) VALUES ($1, $2, $3, $4) RETURNING id, title, salary, equity, company_handle AS "companyHandle"`, [job.title, job.salary, job.equity, job.companyHandle]);
         //#######just result.rows instead?
         let jobby = result.rows[0];
+        console.log(jobby)
         return jobby
     }
 
