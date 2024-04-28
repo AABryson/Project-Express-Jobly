@@ -1,16 +1,24 @@
 // 'use strict'
 const express = require('express');
-const { UnauthorizedError } = require('../expressError');
+const jsonschema = require('jsonschema')
+const { BadRequestError } = require('../expressError');
 //their code has ({ mergeParams: true })
 const router = express.Router()
-const Job = require('../models/jobs')
+const Job = require('../models/job')
 const { ensureAdmin } = require("../middleware/auth");
+const jobNewSchema = require("../schemas/jobNew.json")
+const jobUpdateSchema = require('../schemas/jobUpdate.json')
 
 
 
 
 router.post('/', ensureAdmin, async function (req, res, next) {
     try {
+        const validator = jsonschema.validate(req.body, jobNewSchema);
+        if (!validator.valid) {
+            const errs = validator.errors.map(e => e.stack);
+            throw new BadRequestError(errs);
+    }
 //#their code passed an object with properties title, etc.
         let title = req.body.title;
         console.log(title);
@@ -25,7 +33,6 @@ router.post('/', ensureAdmin, async function (req, res, next) {
         
 //#their code has ({postjob}); i think that means there will be a key -postjob- and its value will be the object 'postjob'
         return res.json({result})
-        // return res.status(201).json(postJob)
     } catch (err) {
 //#remember to return
         return next(err)
@@ -47,15 +54,6 @@ router.get('/', async function(req, res, next){
     }
 })
 
-// router.get('/', async function(req, res, next) {
-//     try {
-//         let query = req.query;
-//         let getSpecJob = await Job.getAllJobs(query);
-//         return res.json(getSpecJob)
-//     } catch(err) {
-//         next(err)
-//     }
-// })
 
 router.get('/:title', async function(req, res, next){
     try {
@@ -69,6 +67,11 @@ router.get('/:title', async function(req, res, next){
 
 router.patch('/:id', ensureAdmin, async function(req, res, next){
     try {
+        const validator = jsonschema.validate(req.body, jobUpdateSchema);
+        if (!validator.valid) {
+            const errs = validator.errors.map(e => e.stack);
+            throw new BadRequestError(errs);
+        }
         let id = req.params.id;
         // let data = req.body.data;
         let data = req.body

@@ -63,7 +63,7 @@ class Company {
             OR num_employees >= $2 
             OR num_employees <= $3`, [name, minEmployees, maxEmployees]);
       return companiesRes.rows;
-        
+      /**if no query string with the correct inputs */  
       } else {
         const companiesRes = await db.query(
         `SELECT handle,
@@ -84,9 +84,6 @@ class Company {
    *
    * Throws NotFoundError if not found.
    **/
-
- 
-
   static async get(handle) {
     const companyRes = await db.query(
           `SELECT handle,

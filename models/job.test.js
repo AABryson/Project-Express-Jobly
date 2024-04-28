@@ -2,14 +2,14 @@
 // const { NotFoundError, BadRequestError } = require("../expressError");
 process.env.NODE_ENV === 'test'
 const db = require("../db.js");
-const Job = require("./jobs.js");
+const Job = require("./job.js");
 const {
     commonBeforeAll,
     commonBeforeEach,
     commonAfterEach,
     commonAfterAll,
     testJobIds
-} = require("./_testCommon");
+} = require("./_testCommon.js");
 
 beforeAll(commonBeforeAll);
 beforeEach(commonBeforeEach);

@@ -29,7 +29,7 @@ const router = express.Router();
  **/
 //originally had ensureLoggedIn
 router.post("/", ensureAdmin || ensureLoggedIn, async function (req, res, next) {
-// router.post("/", async function (req, res, next) {
+
   try {
     const validator = jsonschema.validate(req.body, userNewSchema);
     if (!validator.valid) {

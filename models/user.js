@@ -227,16 +227,13 @@ static async applyToJob(username, job_id) {
 
   // if (!user) throw new NotFoundError(`No username: ${username}`);
 
-  await db.query(
+  let result = await db.query(
         `INSERT INTO applications (job_id, username)
          VALUES ($1, $2)`,
       [job_id, username]);
-}
-  // static async apply(username, job_id) {
-  //   let result = await db.query(`INSERT INTO applications(username, job_id) VALUES ($1, $2) RETURNING (username, job_id)`, [username, job_id]);
-  //   let jobApp = result.rows[0];
-  //   return jobApp;
-  // }
+  let jobApp = result.rows[0];
+  return jobApp
+  }
 }
 
 

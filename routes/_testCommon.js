@@ -3,7 +3,7 @@
 const db = require("../db.js");
 const User = require("../models/user");
 const Company = require("../models/company");
-const Job = require("../models/jobs")
+const Job = require("../models/job.js")
 const { createToken } = require("../helpers/tokens");
 const testJobIds = [];
 async function commonBeforeAll() {
@@ -15,7 +15,9 @@ async function commonBeforeAll() {
   await db.query("DELETE FROM jobs")
 
   //#deleting from application table
-  await db.query('DELETE FROM applications')
+  // await db.query('DELETE FROM applications')
+//#added from other testCommon
+  // await db.query(`INSERT INTO applications(username, job_id) VALUES ('u1', '1') RETURNING job_id`)
 
   await Company.create(
       {
@@ -74,10 +76,9 @@ async function commonBeforeAll() {
     isAdmin: false,
   });
 
-  //######?????????????
+  //#######################?
   await User.applyToJob("u1", testJobIds[0]);
-//#################
-  // await User.apply('u3', testJobIds[0])      
+    
 }
 
 
