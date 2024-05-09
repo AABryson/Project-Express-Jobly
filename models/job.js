@@ -6,12 +6,13 @@ const { sqlForPartialUpdate } = require("../helpers/sql");
 class Job {
 //#################{}??
 //#in solution have LEFT JOIN
-/**return an array of all the jobs; each job will be a  job object */
+    /**return an array of all the jobs; each job will be a  job object */
+//#####Get rid of this?
     static async getAllJobs(){
         let result = await db.query(`SELECT * FROM jobs`);
         allJobs = result.rows
         return alljobs;
-}
+    }
     
 /**return an array of all jobs that have been filtered by one of three criteria */
     static async getAllJobs(title, minSalary, hasEquity) {
@@ -39,7 +40,7 @@ class Job {
         }
         let results = await db.query(`SELECT handle, name, description, num_employees, logo_url FROM companies WHERE handle = $1`, [foundJob.company_handle])
         let companiesWithJob = results.rows
-//#add now property to company and assign above value
+//#add new property to company and assign above value
         foundJob.companies = companiesWithJob;
         return foundJob;
     }
@@ -61,7 +62,9 @@ class Job {
     static async updateJob(id, data){
         const { setCols, values } = sqlForPartialUpdate(data, {});
         let idVarIdx = "$" + (values.length + 1);
-        let result = await db.query(`UPDATE jobs SET ${setCols} WHERE id = ${idVarIdx} RETURNING title, salary, equity, company_handle`, [...values, id])
+        //they have db.query(querySql, [...values])
+        let result = await db.query(`UPDATE jobs SET ${setCols} WHERE id = ${idVarIdx} RETURNING title, 
+        salary, equity, company_handle`, [...values, id])
         //##########same: access rows object first
         let updatedJob = result.rows[0];
         if(!updatedJob) {
@@ -70,7 +73,8 @@ class Job {
         return updatedJob
     }
 
-/**delete a specific job using the job title; returns job title;*/
+    /**delete a specific job using the job title; returns job title;*/
+    //they use id
     static async deleteJob(title){
         let result = await db.query(`DELETE FROM jobs WHERE title = $1 RETURNING title`, [title]);
         console.log('result', result.rows[0])

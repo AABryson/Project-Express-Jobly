@@ -23,11 +23,11 @@ afterAll(commonAfterAll);
 test('create new job', async function(){
     let resp = await request(app)
         .post('/jobs')
-        .send({ id: 6, title : 'newJobTitle', salary : 100, equity : '0.2', company_handle : 'c1' })
+        .send({title : 'newJobTitle', salary : 100, equity : '0.2', companyHandle : 'c1' })
         .set('authorization', `Bearer ${ u2Token }`);
         console.log(resp.body)
-    expect(resp.statusCode).toEqual(201);
-        expect(resp.body).toEqual({ postJob : { title : 'newJobTitle', salary : 100, equity : '0.2', company_handle : 'c1'}})
+        expect(resp.statusCode).toEqual(201);
+        expect(resp.body).toEqual({ postJob : { title : 'newJobTitle', salary : 100, equity : '0.2', companyHandle : 'c1'}})
     // expect(resp.body).toEqual({ id : expect.any(Number), title : 'newJobTitle', salary : 100, equity : '0.2', company_handle : 'c1'})
 })
 

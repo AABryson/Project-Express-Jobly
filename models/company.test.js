@@ -45,6 +45,7 @@ describe("create", function () {
     ]);
   });
 
+  //#################??????????????????????????????????????
   test("bad request with dupe", async function () {
     try {
       await Company.create(newCompany);
@@ -85,7 +86,9 @@ describe("findAll", function () {
       },
     ]);
   });
-  test('try using filter', async function(){
+
+
+  test('try using minEmployees filter', async function(){
     const minEmployees = 3
     let result = await Company.findAll(null, minEmployees);
     console.log(result)
@@ -100,6 +103,20 @@ describe("findAll", function () {
   })
 });
 
+//#new other tests for filters; maxEmployees, name
+test('try using maxEmployees filter', async function(){
+  const maxEmployees = 1
+  let result = await Company.findAll(null, null, maxEmployees);
+  console.log(result)
+  //#########just result.  not result.body
+  expect(result).toEqual([{
+    handle: "c1",
+    name: "C1",
+    description: "Desc1",
+    numEmployees: 1,
+    logoUrl: "http://c1.img"
+  }])
+})
 /************************************** get */
 
 describe("get", function () {
@@ -111,6 +128,16 @@ describe("get", function () {
       description: "Desc1",
       numEmployees: 1,
       logoUrl: "http://c1.img",
+      //theirs: jobs: [
+  // { id: testJobIds[0], title: "Job1", salary: 100, 
+  // equity: "0.1" },
+    // { id: testJobIds[1], title: "Job2", salary: 200, 
+  // equity: "0.2" },
+    // { id: testJobIds[2], title: "Job3", salary: 300, 
+  // equity: "0" },
+    // { id: testJobIds[3], title: "Job4", salary: null, 
+  // equity: null },
+  // ],
       jobs: [{
         "company_handle": "c1",
         "equity": "0",

@@ -17,12 +17,13 @@ afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
 
-
+//#Need filter tests as well; which method does this call? There are two in jobs.js
 test('get all jobs from database', async function(){
     let allJobs = await Job.getAllJobs();
     expect(allJobs).toEqual([{ id: expect.any(Number), title: 'testJobTitle1', salary: 100, equity: '0', company_handle: 'c1'}, {id: expect.any(Number), title: 'testJobTitle2', salary: 0, equity: '0.5', company_handle: 'c2'}])
 })
 
+//############################################################
 test('find job in database', async function(){
     let jobTitle = await Job.findJob('testJobTitle1');
     //need to rewrite to include salary, equity, company_handle
@@ -57,6 +58,7 @@ test("update job in database", async function () {
         salary: 5,
         equity: '0'
     }
+//#they have testJobIds[0] as parameter for updateJob
     let job = await Job.updateJob(1, data);
     expect(job).toEqual({
     //   id: 1,
@@ -66,7 +68,7 @@ test("update job in database", async function () {
   });
 
 
-
+//#################################################
 test('delete job from database', async function(){
     let delete_job = await Job.deleteJob('testJobTitle1')
     //#########################json

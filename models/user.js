@@ -139,6 +139,7 @@ class User {
     if (!user) throw new NotFoundError(`No user: ${username}`);
 
     const jobs = await db.query(`SELECT job_id FROM applications WHERE username = $1`, [username])
+//#mine
     let jobsAppliedFor = jobs.rows;
     user.jobs = jobsAppliedFor;
 
@@ -211,21 +212,22 @@ class User {
   }
 //###theirs
 static async applyToJob(username, job_id) {
-  // const preCheck = await db.query(
-  //       `SELECT id
-  //        FROM jobs
-  //        WHERE id = $1`, [jobId]);
-  // const job = preCheck.rows[0];
+  //change jobId to job_id
+  const preCheck = await db.query(
+        `SELECT id
+         FROM jobs 
+         WHERE id = $1`, [job_id]);
+  const job = preCheck.rows[0];
 
-  // if (!job) throw new NotFoundError(`No job: ${jobId}`);
+  if (!job) throw new NotFoundError(`No job: ${job_id}`);
 
-  // const preCheck2 = await db.query(
-  //       `SELECT username
-  //        FROM users
-  //        WHERE username = $1`, [username]);
-  // const user = preCheck2.rows[0];
+  const preCheck2 = await db.query(
+        `SELECT username
+         FROM users
+         WHERE username = $1`, [username]);
+  const user = preCheck2.rows[0];
 
-  // if (!user) throw new NotFoundError(`No username: ${username}`);
+  if (!user) throw new NotFoundError(`No username: ${username}`);
 
   let result = await db.query(
         `INSERT INTO applications (job_id, username)

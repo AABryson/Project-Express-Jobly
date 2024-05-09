@@ -25,8 +25,8 @@ router.post('/', ensureAdmin, async function (req, res, next) {
         let salary = req.body.salary;
         let equity = req.body.equity;
         //foreign key;
-        let company_handle = req.body.companyHandle;
-        let result = await Job.createJob(title, salary, equity, company_handle)
+        let companyHandle = req.body.companyHandle;
+        let result = await Job.createJob(title, salary, equity, companyHandle)
         // console.log(req.body);
         // let result = await Job.createJob(req.body);
         console.log(result);
